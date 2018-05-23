@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="commerce_referrals" baseClass="comSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
-    <object class="CommerceReferralsReferrer" table="commerce_referrals_referrers" extends="comSimpleObject" >
-        <field></field>
+<model package="commerce_referrals" baseClass="xPDOSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
+    <object class="CommerceReferralsReferrer" table="commerce_referrals_referrers" extends="xPDOSimpleObject" >
+        <field key="name" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
+        <field key="token" dbtype="varchar" precision="40" phptype="string" null="false" />
+        <field key="contact_person" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
+        <field key="email" dbtype="varchar" precision="190" phptype="string" null="true"  />
+        <field key="phone" dbtype="varchar" precision="190" phptype="string" null="true" />
+        <field key="website" dbtype="varchar" precision="190" phptype="string" null="true" />
+        <field key="address1" dbtype="varchar" precision="190" phptype="string" null="true" />
+        <field key="address2" dbtype="varchar" precision="190" phptype="string" null="true" />
+        <field key="country" dbtype="varchar" precision="20" phptype="string" null="false" default="" />
+        <field key="comment" dbtype="text" phptype="string" null="true" />
+        <field key="added_on" formatter="datetime" dbtype="int" precision="20" phptype="int" null="false" default="0" />
+        <field key="position" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+
+        <composite alias="Referral" class="CommerceReferralsReferral" local="id" foreign="referrer_id" cardinality="one" owner="local" />
+    </object>
+
+    <object class="CommerceReferralsReferral" table="commerce_referrals_referrals" extends="xPDOSimpleObject" >
+        <field key="referrer_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" />
+        <field key="product_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" />
+        <field key="referred_url" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
+        <field key="referred_name" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
+        <field key="description" dbtype="text" phptype="string" null="true" />
+        <field key="referred_on" formatter="datetime" dbtype="int" precision="20" phptype="int" null="false" default="0" />
     </object>
 </model>

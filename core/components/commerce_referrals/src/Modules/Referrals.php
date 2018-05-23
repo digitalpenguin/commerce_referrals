@@ -43,7 +43,7 @@ class Referrals extends BaseModule {
         // Add the xPDO package, so Commerce can detect the derivative classes
         $root = dirname(dirname(__DIR__));
         $path = $root . '/model/';
-//        $this->adapter->loadPackage('commerce_referrals', $path);
+        $this->adapter->loadPackage('commerce_referrals', $path);
 
         // Add template path to twig
 //        /** @var ChainLoader $loader */
@@ -76,11 +76,16 @@ class Referrals extends BaseModule {
             $referrerToken['token'] = $product['referrer'];
             //$this->adapter->log(1,print_r($referrerToken,true));
 
-            // TODO: Check to see if referrer token is valid
-
+            $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
+                'token' =>  $referrerToken['token']
+            ]);
+            //$this->adapter->log(1,print_r($referrer->toArray(),true));
+            if($referrer) {
+                $order->setProperty('referrer',$referrerToken);
+            }
 
             //$order['properties'][] = $referrerToken;
-            $order->setProperty('referrer',$referrerToken);
+
             //$this->adapter->log(1,print_r($order->toArray(),true));
         }
     }
@@ -88,7 +93,6 @@ class Referrals extends BaseModule {
 
     public function getOrder(OrderActions $event) {
         $this->order = $event->getOrder();
-        //$this->adapter->log(1,print_r($order->toArray(),true));
     }
 
     /**
@@ -108,14 +112,26 @@ class Referrals extends BaseModule {
         $page = $event->getPage();
         $meta = $page->getMeta();
         if($meta['key'] === 'order') {
-            $page->addSection((new ReferralSection($this->commerce,[
-                'order' => $this->order,
-                'priority'  =>  1
-            ]))->setUp());
-            $page->findSection('items_section')->priority = 2;
-            $page->findSection('customer_section')->priority = 3;
-            $page->findSection('shipments_section')->priority = 4;
-            $page->findSection('transactions_section')->priority = 5;
+            $orderArray = $this->order->toArray();
+            //$this->adapter->log(1,print_r($orderArray,true));
+
+            if($orderArray['properties']['referrer']['token']) {
+                $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
+                    'token' =>  $orderArray['properties']['referrer']['token']
+                ]);
+                if($referrer) {
+                    $page->addSection((new ReferralSection($this->commerce, [
+                        'order' => $this->order,
+                        'priority' => 1,
+                        'referrer' => $referrer->toArray()
+                    ]))->setUp());
+                    $page->findSection('items_section')->priority = 2;
+                    $page->findSection('customer_section')->priority = 3;
+                    $page->findSection('shipments_section')->priority = 4;
+                    $page->findSection('transactions_section')->priority = 5;
+                }
+            }
+
         }
     }
 

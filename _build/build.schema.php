@@ -78,9 +78,11 @@ EOD;
  */
 
 EOD;
-
+$modx->addPackage('commerce_referrals', $sources['model']);
 $generator->parseSchema($sources['schema'] . 'commerce_referrals.mysql.schema.xml', $sources['model']);
 
+$manager->createObjectContainer('CommerceReferralsReferrer');
+$manager->createObjectContainer('CommerceReferralsReferral');
 
 $mtime= microtime();
 $mtime= explode(" ", $mtime);
