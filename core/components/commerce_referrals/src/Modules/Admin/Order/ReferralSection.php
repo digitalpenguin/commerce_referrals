@@ -22,15 +22,20 @@ class ReferralSection extends Section {
 
     public function getTitle()
     {
-        return $this->adapter->lexicon($this->title);
+        return '<div style="margin-top:15px;">'.$this->adapter->lexicon($this->title).'</div>';
     }
 
     public function addHTML() {
         $html = [];
-        $html[] = '<h1>REFERRRRRRRR</h1>';
-        $html[] = implode(',',$this->getMeta());
+        $html[] = '<div style="margin-bottom:30px;">';
+        $html[] = $this->adapter->lexicon($this->intro);
+        $html[] = '</div>';
         $this->addWidget(new HtmlWidget($this->commerce, [
             'html' => implode('', $html),
         ]));
+    }
+
+    public function getReferrerData() {
+        //TODO:Grab referrer info from db
     }
 }
