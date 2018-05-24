@@ -1,5 +1,4 @@
 <?php
-
 namespace DigitalPenguin\Referrals\Admin\Referrer;
 
 use modmore\Commerce\Admin\Sections\SimpleSection;

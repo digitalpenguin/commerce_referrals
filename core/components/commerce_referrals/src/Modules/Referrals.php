@@ -57,6 +57,7 @@ class Referrals extends BaseModule {
         $dispatcher->addListener(\Commerce::EVENT_ITEM_ADDED_TO_CART,[$this, 'addReferrerTokenToOrder']);
     }
 
+
     /**
      * Takes the 'referrer' value from an item that is added to the cart and
      * adds it to the order properties.
@@ -138,6 +139,7 @@ class Referrals extends BaseModule {
     {
         $generator = $event->getGenerator();
         $generator->addPage('referrers', '\DigitalPenguin\Referrals\Admin\Referrer\ReferrerPage');
+        $generator->addPage('referrers/create', '\DigitalPenguin\Referrals\Admin\Referrer\Create');
     }
 
     public function loadMenuItem(TopNavMenuEvent $event)
@@ -146,7 +148,7 @@ class Referrals extends BaseModule {
 
         $items = $this->insertInArray($items, ['referrers' => [
             'name' => 'Referrers',
-            'key' => 'referrers',
+            'key' => 'referrers-page',
             'link' => $this->adapter->makeAdminUrl('referrers'),
         ]], 5);
 

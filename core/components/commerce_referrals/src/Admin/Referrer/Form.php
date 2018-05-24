@@ -16,12 +16,12 @@ use modmore\Commerce\Admin\Widgets\Form\Validation\Length;
  * Class Form
  * @package DigitalPenguin\Referrals
  *
- * @property $record \CommerceReferralsReferral
+ * @property $record \CommerceReferralsReferrer
  */
 class Form extends FormWidget
 {
-    protected $classKey = 'CommerceReferralsReferral';
-    public $key = 'referrals-form';
+    protected $classKey = 'CommerceReferralsReferrer';
+    public $key = 'referrer-form';
     public $title = '';
 
     public function getFields(array $options = array())
@@ -29,89 +29,37 @@ class Form extends FormWidget
         $fields = [];
 
         $fields[] = new TextField($this->commerce, [
-            'name' => 'code',
-            'label' => $this->adapter->lexicon('commerce.code'),
-            'description' => 'The code the customer has to enter.',
-            'validation' => [
-                new Required(),
-                new Length(3, 190),
-            ]
+            'name' => 'name',
+            'label' => $this->adapter->lexicon('commerce_referrals.name'),
+            'description' => 'Your referrer\'s name.',
         ]);
 
-
-        $fields[] = new SectionField($this->commerce, [
-            'label' => 'Discount'
+        $fields[] = new TextField($this->commerce, [
+            'name' => 'token',
+            'label' => $this->adapter->lexicon('commerce_referrals.token'),
+            'description' => 'This is the token add to the end of a product URL that your partner company will use to refer customers.',
         ]);
 
-        $fields[] = new NumberField($this->commerce, [
-            'name' => 'discount',
-            'label' => $this->adapter->lexicon('commerce.discount'),
-            'input_class' => 'commerce-field-currency',
+        $fields[] = new TextField($this->commerce, [
+            'name' => 'contact_person',
+            'label' => $this->adapter->lexicon('commerce_referrals.contact_person'),
+            'description' => 'Name of the person you\'re in contact with at this company.',
         ]);
+        foreach($fields as $field) {
+            $this->adapter->log(1,print_r($field->getHTML(),true));
+        }
 
-        $fields[] = new NumberField($this->commerce, [
-            'name' => 'discount_percentage',
-            'label' => $this->adapter->lexicon('commerce.discount_percentage'),
-            'description' => 'Percentage with up to 4 decimals (e.g. 2.5 for a 2,5% discount)',
-        ]);
-
-        $fields[] = new SectionField($this->commerce, [
-            'label' => 'Availability'
-        ]);
-
-        $fields[] = new CheckboxField($this->commerce, [
-            'name' => 'active',
-            'label' => $this->adapter->lexicon('commerce.active'),
-            'value' => true,
-        ]);
-
-        $fields[] = new NumberField($this->commerce, [
-            'name' => 'max_uses',
-            'label' => $this->adapter->lexicon('commerce.max_uses'),
-        ]);
-        $fields[] = new SelectMultipleField($this->commerce, [
-            'name' => 'products',
-            'label' => $this->adapter->lexicon('commerce.products'),
-            'optionsClass' => 'comProduct',
-            'optionsCondition' => ['removed' => false]
-        ]);
-
-        $fields[] = new DateTimeField($this->commerce, [
-            'name' => 'available_from',
-            'label' => $this->adapter->lexicon('commerce.available_from'),
-        ]);
-
-        $fields[] = new DateTimeField($this->commerce, [
-            'name' => 'available_until',
-            'label' => $this->adapter->lexicon('commerce.available_until'),
-        ]);
-
-        $fields[] = new NumberField($this->commerce, [
-            'name' => 'minimum_order_total',
-            'label' => $this->adapter->lexicon('commerce.minimum_order_total'),
-            'input_class' => 'commerce-field-currency',
-        ]);
-
-        $fields[] = new NumberField($this->commerce, [
-            'name' => 'maximum_order_total',
-            'label' => $this->adapter->lexicon('commerce.maximum_order_total'),
-            'input_class' => 'commerce-field-currency',
-        ]);
-
+        //return array_merge($fields, $this->record->getModelFields());
         return $fields;
     }
 
     public function getFormAction(array $options = array())
     {
         if ($this->record->get('id')) {
-            return $this->adapter->makeAdminUrl('coupons/update', ['id' => $this->record->get('id')]);
+            return $this->adapter->makeAdminUrl('referrers/update', ['id' => $this->record->get('id')]);
         }
-        return $this->adapter->makeAdminUrl('coupons/create');
+        return $this->adapter->makeAdminUrl('referrers/create');
     }
 
-    public function newRecordCreated()
-    {
-        $this->record->set('created_on', time());
-        $this->record->set('created_by', $this->adapter->getUser()->get('id'));
-    }
+
 }
