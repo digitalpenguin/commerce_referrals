@@ -1,11 +1,11 @@
 <?php
-namespace DigitalPenguin\Referrals\Modules;
+namespace DigitalPenguin\Referrals\Admin\Referrer;
 
 use modmore\Commerce\Admin\Page;
 use modmore\Commerce\Admin\Sections\SimpleSection;
 
 class ReferrerPage extends Page {
-    public $key = 'referrers';
+    public $key = 'referrers-page';
     public $title = 'commerce_referrals.referrers';
 
     public function setUp()

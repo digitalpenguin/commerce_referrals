@@ -1,5 +1,5 @@
 <?php
-namespace DigitalPenguin\Referrals\Modules\Admin\Order;
+namespace DigitalPenguin\Referrals\Admin\Order;
 
 use modmore\Commerce\Admin\Section;
 use modmore\Commerce\Admin\Widgets\HtmlWidget;

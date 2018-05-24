@@ -4,14 +4,13 @@ namespace DigitalPenguin\Referrals\Modules;
 use modmore\Commerce\Events\Admin\GeneratorEvent;
 use modmore\Commerce\Events\Admin\OrderActions;
 use modmore\Commerce\Events\Admin\TopNavMenu as TopNavMenuEvent;
-use modmore\Commerce\Events\Order;
 use modmore\Commerce\Events\Reports;
 use modmore\Commerce\Modules\BaseModule;
 use modmore\Commerce\Reports\Addresses;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use modmore\Commerce\Events\Admin\PageEvent;
 use modmore\Commerce\Events\Cart\Item;
-use DigitalPenguin\Referrals\Modules\Admin\Order\ReferralSection;
+use DigitalPenguin\Referrals\Admin\Order\ReferralSection;
 
 require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 
@@ -138,7 +137,7 @@ class Referrals extends BaseModule {
     public function loadPages(GeneratorEvent $event)
     {
         $generator = $event->getGenerator();
-        $generator->addPage('referrers', '\DigitalPenguin\Referrals\Modules\ReferrerPage');
+        $generator->addPage('referrers', '\DigitalPenguin\Referrals\Admin\Referrer\ReferrerPage');
     }
 
     public function loadMenuItem(TopNavMenuEvent $event)
