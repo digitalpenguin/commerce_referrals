@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="commerce_referrals" baseClass="xPDOSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
-    <object class="CommerceReferralsReferrer" table="commerce_referrals_referrers" extends="xPDOSimpleObject" >
+<model package="commerce_referrals" baseClass="comSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
+    <object class="CommerceReferralsReferrer" table="commerce_referrals_referrers" extends="comSimpleObject" >
         <field key="name" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
         <field key="token" dbtype="varchar" precision="40" phptype="string" null="false" />
         <field key="contact_person" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
@@ -17,7 +17,7 @@
         <composite alias="Referral" class="CommerceReferralsReferral" local="id" foreign="referrer_id" cardinality="one" owner="local" />
     </object>
 
-    <object class="CommerceReferralsReferral" table="commerce_referrals_referrals" extends="xPDOSimpleObject" >
+    <object class="CommerceReferralsReferral" table="commerce_referrals_referrals" extends="comSimpleObject" >
         <field key="referrer_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" />
         <field key="product_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" />
         <field key="referred_url" dbtype="varchar" precision="190" phptype="string" null="false" default="" />

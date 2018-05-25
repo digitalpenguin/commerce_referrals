@@ -9,7 +9,7 @@
  * @package commerce_referrals
  * @license See core/components/commerce_referrals/docs/license.txt
  */
-class CommerceReferralsReferral extends xPDOSimpleObject
+class CommerceReferralsReferral extends comSimpleObject
 {
 
 }

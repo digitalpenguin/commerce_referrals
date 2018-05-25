@@ -14,7 +14,7 @@ $xpdo_meta_map['CommerceReferralsReferrer']= array (
   'package' => 'commerce_referrals',
   'version' => '1.1',
   'table' => 'commerce_referrals_referrers',
-  'extends' => 'xPDOSimpleObject',
+  'extends' => 'comSimpleObject',
   'tableMeta' => 
   array (
     'engine' => 'InnoDB',

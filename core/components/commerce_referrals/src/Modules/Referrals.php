@@ -65,28 +65,17 @@ class Referrals extends BaseModule {
      */
     public function addReferrerTokenToOrder(Item $event) {
         $order = $event->getOrder();
-        //$this->adapter->log(1,print_r($order->toArray(),true));
-        $item = $event->getItem();
-        //$this->adapter->log(1,print_r($item->toArray(),true));
-        //$this->adapter->log(1,print_r($_POST,true));
+        $item = $event->getItem()->toArray();
 
-        $products = $this->commerce->modx->sanitize($_POST['products']);
-        foreach($products as $k => $product) {
-            $referrerToken['product_id'] = intval($k);
-            $referrerToken['token'] = $product['referrer'];
-            //$this->adapter->log(1,print_r($referrerToken,true));
-
+        if($event->getOption('referrer') && $item['id']) {
+            $referrerToken['token'] = $this->commerce->modx->sanitizeString($event->getOption('referrer'));
+            $referrerToken['product_id'] = intval($item['id']);
             $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
                 'token' =>  $referrerToken['token']
             ]);
-            //$this->adapter->log(1,print_r($referrer->toArray(),true));
             if($referrer) {
                 $order->setProperty('referrer',$referrerToken);
             }
-
-            //$order['properties'][] = $referrerToken;
-
-            //$this->adapter->log(1,print_r($order->toArray(),true));
         }
     }
 

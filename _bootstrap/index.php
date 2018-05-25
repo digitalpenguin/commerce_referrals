@@ -105,7 +105,12 @@ include $componentPath . '/core/components/commerce_referrals/vendor/autoload.ph
 $modulePath = $componentPath . '/core/components/commerce_referrals/src/Modules/';
 
 // Instruct Commerce to load modules from our directory, providing the base namespace and module path twice
-$commerce->loadModulesFromDirectory($modulePath, 'ThirdParty\\Referrals\\Modules\\', $modulePath);
+$commerce->loadModulesFromDirectory($modulePath, 'DigitalPenguin\\Referrals\\Modules\\', $modulePath);
+
+$manager= $modx->getManager();
+$modx->addPackage('commerce_referrals', $componentPath . '/core/components/commerce_referrals/model/');
+$manager->createObjectContainer('CommerceReferralsReferrer');
+$manager->createObjectContainer('CommerceReferralsReferral');
 
 // Clear the cache
 $modx->cacheManager->refresh();

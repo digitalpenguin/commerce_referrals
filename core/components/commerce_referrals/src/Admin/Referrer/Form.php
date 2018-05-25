@@ -32,23 +32,31 @@ class Form extends FormWidget
             'name' => 'name',
             'label' => $this->adapter->lexicon('commerce_referrals.name'),
             'description' => 'Your referrer\'s name.',
+            'validation' => [
+                new Required(),
+                new Length(3, 190),
+            ]
         ]);
 
         $fields[] = new TextField($this->commerce, [
             'name' => 'token',
             'label' => $this->adapter->lexicon('commerce_referrals.token'),
             'description' => 'This is the token add to the end of a product URL that your partner company will use to refer customers.',
+            'validation' => [
+                new Required(),
+            ]
         ]);
 
         $fields[] = new TextField($this->commerce, [
             'name' => 'contact_person',
             'label' => $this->adapter->lexicon('commerce_referrals.contact_person'),
             'description' => 'Name of the person you\'re in contact with at this company.',
+            /*'validation' => [
+                new Required(),
+                new Length(3, 190),
+            ]*/
         ]);
-        foreach($fields as $field) {
-            $this->adapter->log(1,print_r($field->getHTML(),true));
-        }
-
+        $this->adapter->log(1,print_r($this->record->toArray(),true));
         //return array_merge($fields, $this->record->getModelFields());
         return $fields;
     }

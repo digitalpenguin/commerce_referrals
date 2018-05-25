@@ -25,6 +25,8 @@ $sources = array(
     'assets' => $root.'assets/components/commerce_referrals/',
     'schema' => $root.'core/components/commerce_referrals/model/schema/',
 );
+$modx->addPackage('commerce', MODX_CORE_PATH.'components/commerce/model/');
+$modx->addPackage('commerce_referrals', $sources['model']);
 $manager= $modx->getManager();
 $generator= $manager->getGenerator();
 $generator->classTemplate= <<<EOD
@@ -78,7 +80,7 @@ EOD;
  */
 
 EOD;
-$modx->addPackage('commerce_referrals', $sources['model']);
+
 $generator->parseSchema($sources['schema'] . 'commerce_referrals.mysql.schema.xml', $sources['model']);
 
 $manager->createObjectContainer('CommerceReferralsReferrer');
