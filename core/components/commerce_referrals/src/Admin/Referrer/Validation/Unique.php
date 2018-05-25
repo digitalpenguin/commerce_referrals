@@ -1,5 +1,5 @@
 <?php
-namespace DigitalPenguin\Referrals\Admin\Referrer\Validate;
+namespace DigitalPenguin\Referrals\Admin\Referrer\Validation;
 
 use modmore\Commerce\Admin\Widgets\Form\Validation\Rule;
 

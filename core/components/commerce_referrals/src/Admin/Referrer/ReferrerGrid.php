@@ -64,6 +64,11 @@ class ReferrerGrid extends GridWidget {
                 'title' => $this->adapter->lexicon('commerce_referrals.latest'),
                 'sortable' => true,
             ],
+            [
+                'name' => 'comment',
+                'title' => $this->adapter->lexicon('commerce_referrals.comment'),
+                'sortable' => false,
+            ],
 
         ];
     }

@@ -22,5 +22,6 @@ $_lang['commerce_referrals.latest'] = 'Latest';
 $_lang['commerce_referrals.address1'] = 'Address Line 1';
 $_lang['commerce_referrals.address2'] = 'Address Line 2';
 $_lang['commerce_referrals.country'] = 'Country';
+$_lang['commerce_referrals.comment'] = 'Comments';
 
 $_lang['commerce_referrals.validation.already_exists'] = 'Already exists! Please enter a unique value.';

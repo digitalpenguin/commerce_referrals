@@ -2,19 +2,14 @@
 
 namespace DigitalPenguin\Referrals\Admin\Referrer;
 
-use modmore\Commerce\Admin\Widgets\Form\NumberField;
-use modmore\Commerce\Admin\Widgets\Form\Validation\Required;
-use DigitalPenguin\Referrals\Admin\Referrer\Validate\Unique;
 use modmore\Commerce\Admin\Widgets\FormWidget;
-use modmore\Commerce\Admin\Widgets\Form\CheckboxField;
-use modmore\Commerce\Admin\Widgets\Form\DateTimeField;
-use modmore\Commerce\Admin\Widgets\Form\SectionField;
-use modmore\Commerce\Admin\Widgets\Form\SelectMultipleField;
 use modmore\Commerce\Admin\Widgets\Form\TextField;
+use modmore\Commerce\Admin\Widgets\Form\TextareaField;
+use modmore\Commerce\Admin\Widgets\Form\CountryField;
 use modmore\Commerce\Admin\Widgets\Form\Validation\Length;
 use modmore\Commerce\Admin\Widgets\Form\Validation\Regex;
-use modmore\Commerce\Admin\Widgets\Form\Validation\Rule;
-
+use modmore\Commerce\Admin\Widgets\Form\Validation\Required;
+use DigitalPenguin\Referrals\Admin\Referrer\Validation\Unique;
 
 /**
  * Class Form
@@ -101,10 +96,16 @@ class Form extends FormWidget
             'description' => 'Second line of address',
         ]);
 
-        $fields[] = new TextField($this->commerce, [
+        $fields[] = new CountryField($this->commerce, [
             'name' => 'country',
             'label' => $this->adapter->lexicon('commerce_referrals.country'),
             'description' => 'Select a country.',
+        ]);
+
+        $fields[] = new TextareaField($this->commerce, [
+            'name' => 'comment',
+            'label' => $this->adapter->lexicon('commerce_referrals.comment'),
+            'description' => 'Add any notes you need to remember about this referrer.',
         ]);
 
         return $fields;
