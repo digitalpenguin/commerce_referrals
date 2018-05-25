@@ -129,6 +129,8 @@ class Referrals extends BaseModule {
         $generator = $event->getGenerator();
         $generator->addPage('referrers', '\DigitalPenguin\Referrals\Admin\Referrer\ReferrerPage');
         $generator->addPage('referrers/create', '\DigitalPenguin\Referrals\Admin\Referrer\Create');
+        $generator->addPage('referrers/update', '\DigitalPenguin\Referrals\Admin\Referrer\Update');
+        $generator->addPage('referrers/delete', '\DigitalPenguin\Referrals\Admin\Referrer\Delete');
     }
 
     public function loadMenuItem(TopNavMenuEvent $event)

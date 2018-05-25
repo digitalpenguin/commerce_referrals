@@ -6,7 +6,7 @@ use modmore\Commerce\Admin\Page;
 
 class Create extends Page {
     public $key = 'referrers/create';
-    public $title = 'commerce_referrals.add_referrer';
+    public $title = 'commerce_referrals.referrer.add';
 
     public function setUp()
     {

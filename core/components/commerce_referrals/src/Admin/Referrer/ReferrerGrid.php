@@ -20,7 +20,7 @@ class ReferrerGrid extends GridWidget {
         $collection = $this->adapter->getCollection('CommerceReferralsReferrer', $c);
 
         foreach ($collection as $object) {
-            $items[] = $this->prepareItem($object);
+            $items[] = $this->prepareItem($object->toArray());
         }
 
         return $items;
@@ -29,11 +29,11 @@ class ReferrerGrid extends GridWidget {
     public function getColumns(array $options = array())
     {
         return [
-            [
+            /*[
                 'name' => 'id',
                 'primary' => true,
                 'hidden' => true,
-            ],
+            ],*/
             [
                 'name' => 'name',
                 'title' => $this->adapter->lexicon('commerce_referrals.name'),
@@ -74,12 +74,12 @@ class ReferrerGrid extends GridWidget {
 
         $toolbar[] = [
             'name' => 'add-referrer',
-            'title' => $this->adapter->lexicon('commerce_referrals.add_referrer'),
+            'title' => $this->adapter->lexicon('commerce_referrals.referrer.add'),
             'type' => 'button',
             'link' => $this->adapter->makeAdminUrl('referrers/create'),
             'button_class' => 'commerce-ajax-modal',
             'icon_class' => 'icon-plus',
-            'modal_title' => $this->adapter->lexicon('commerce_referrals.add_referrer'),
+            'modal_title' => $this->adapter->lexicon('commerce_referrals.referrer.add'),
             'position' => 'top',
         ];
 
@@ -95,14 +95,12 @@ class ReferrerGrid extends GridWidget {
         return $toolbar;
     }
 
-    public function prepareItem($referrer)
+    public function prepareItem($item)
     {
-        $item = $referrer->toArray('', false, true);
-
         $item['actions'] = [];
 
         //if (in_array($this->order->getState(), [\comOrder::STATE_CART, \comOrder::STATE_PROCESSING], true)) {
-            $editUrl = $this->adapter->makeAdminUrl('referrers/update', ['id' => $item['id'], 'order' => $item['order']]);
+            $editUrl = $this->adapter->makeAdminUrl('referrers/update', ['id' => $item['id']]);
             $item['actions'][] = (new Action())
                 ->setUrl($editUrl)
                 ->setTitle($this->adapter->lexicon('commerce_referrals.referrer.edit'))
