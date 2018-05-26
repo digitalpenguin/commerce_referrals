@@ -4,9 +4,8 @@ namespace DigitalPenguin\Referrals\Modules;
 use modmore\Commerce\Events\Admin\GeneratorEvent;
 use modmore\Commerce\Events\Admin\OrderActions;
 use modmore\Commerce\Events\Admin\TopNavMenu as TopNavMenuEvent;
-use modmore\Commerce\Events\Reports;
+use modmore\Commerce\Events\OrderState;
 use modmore\Commerce\Modules\BaseModule;
-use modmore\Commerce\Reports\Addresses;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use modmore\Commerce\Events\Admin\PageEvent;
 use modmore\Commerce\Events\Cart\Item;
@@ -54,27 +53,37 @@ class Referrals extends BaseModule {
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_GET_MENU, [$this, 'loadMenuItem']);
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_PAGE_BEFORE_GENERATE,[$this, 'addSectionToOrderPage']);
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_ORDER_ACTIONS,[$this, 'getOrder']);
-        $dispatcher->addListener(\Commerce::EVENT_ITEM_ADDED_TO_CART,[$this, 'addReferrerTokenToOrder']);
+        $dispatcher->addListener(\Commerce::EVENT_STATE_CART_TO_PROCESSING,[$this, 'addReferrerTokenToOrder']);
+
     }
 
 
     /**
-     * Takes the 'referrer' value from an item that is added to the cart and
+     * Takes the 'ref' value from the user's session and
      * adds it to the order properties.
      * @param Item $event
      */
-    public function addReferrerTokenToOrder(Item $event) {
+    public function addReferrerTokenToOrder(OrderState $event) {
+        //$this->adapter->log(1,'Session ref: '.$_SESSION['ref']);
         $order = $event->getOrder();
-        $item = $event->getItem()->toArray();
+        if($order){
+            $orderArr = $order->toArray();
+            if($_SESSION['ref']) {
+                $referrerToken['token'] = $_SESSION['ref'];
+                $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
+                    'token' =>  $referrerToken['token']
+                ]);
 
-        if($event->getOption('referrer') && $item['id']) {
-            $referrerToken['token'] = $this->commerce->modx->sanitizeString($event->getOption('referrer'));
-            $referrerToken['product_id'] = intval($item['id']);
-            $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
-                'token' =>  $referrerToken['token']
-            ]);
-            if($referrer) {
-                $order->setProperty('referrer',$referrerToken);
+                if($referrer) {
+                    $order->setProperty('referrer',$referrerToken);
+                    $order->save();
+                    // Create referral record
+                    $referral = $this->adapter->newObject('CommerceReferralsReferral');
+                    $referral->set('referrer_id',$referrer->get('id'));
+                    $referral->set('referred_on',time());
+                    $referral->set('order',$orderArr['id']);
+                    $referral->save();
+                }
             }
         }
     }
@@ -102,9 +111,10 @@ class Referrals extends BaseModule {
         $meta = $page->getMeta();
         if($meta['key'] === 'order') {
             $orderArray = $this->order->toArray();
-            //$this->adapter->log(1,print_r($orderArray,true));
+            $this->adapter->log(1,print_r($orderArray,true));
 
             if($orderArray['properties']['referrer']['token']) {
+                //$this->adapter->log(1,print_r($orderArray,true));
                 $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
                     'token' =>  $orderArray['properties']['referrer']['token']
                 ]);
@@ -127,28 +137,42 @@ class Referrals extends BaseModule {
     public function loadPages(GeneratorEvent $event)
     {
         $generator = $event->getGenerator();
-        $generator->addPage('referrers', '\DigitalPenguin\Referrals\Admin\Referrer\ReferrerPage');
+        $generator->addPage('referrals', '\DigitalPenguin\Referrals\Admin\Referral\ReferralPage');
+        $generator->addPage('referrals/referrers', '\DigitalPenguin\Referrals\Admin\Referrer\ReferrerPage');
         $generator->addPage('referrers/create', '\DigitalPenguin\Referrals\Admin\Referrer\Create');
         $generator->addPage('referrers/update', '\DigitalPenguin\Referrals\Admin\Referrer\Update');
         $generator->addPage('referrers/delete', '\DigitalPenguin\Referrals\Admin\Referrer\Delete');
+
+
     }
 
     public function loadMenuItem(TopNavMenuEvent $event)
     {
         $items = $event->getItems();
 
-        $items = $this->insertInArray($items, ['referrers' => [
-            'name' => 'Referrers',
-            'key' => 'referrers-page',
-            'link' => $this->adapter->makeAdminUrl('referrers'),
+        $items = $this->insertInArray($items, ['referrals' => [
+            'name' => 'Referrals',
+            'key' => 'referrals',
+            'icon' => 'icon comments outline',
+            'link' => $this->adapter->makeAdminUrl('referrals'),
+            'submenu' => [
+                [
+                    'name' => $this->adapter->lexicon('commerce_referrals.referrals'),
+                    'key' => 'referrals',
+                    'link' => $this->adapter->makeAdminUrl('referrals'),
+                    'icon' => 'icon comments outline',
+                ],
+                [
+                    'name' => $this->adapter->lexicon('commerce_referrals.referrers'),
+                    'key' => 'referrals/referrers',
+                    'link' => $this->adapter->makeAdminUrl('referrals/referrers'),
+                    'icon' => 'icon icon-user',
+                ],
+
+            ],
         ]], 5);
 
         $event->setItems($items);
-    }
-
-    public function addReport(Reports $event)
-    {
-        $event->addReport(new Addresses($this->commerce));
     }
 
     private function insertInArray($array,$values,$offset) {

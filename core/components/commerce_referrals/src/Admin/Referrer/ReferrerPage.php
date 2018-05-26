@@ -6,7 +6,7 @@ use modmore\Commerce\Admin\Sections\SimpleSection;
 use modmore\Commerce\Admin\Widgets\HtmlWidget;
 
 class ReferrerPage extends Page {
-    public $key = 'referrers-page';
+    public $key = 'referrals/referrers';
     public $title = 'commerce_referrals.referrers';
 
     public function setUp()

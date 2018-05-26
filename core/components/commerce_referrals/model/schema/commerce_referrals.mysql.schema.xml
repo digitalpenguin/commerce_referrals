@@ -19,10 +19,7 @@
 
     <object class="CommerceReferralsReferral" table="commerce_referrals_referrals" extends="comSimpleObject" >
         <field key="referrer_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" />
-        <field key="product_id" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" />
-        <field key="referred_url" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
-        <field key="referred_name" dbtype="varchar" precision="190" phptype="string" null="false" default="" />
-        <field key="description" dbtype="text" phptype="string" null="true" />
+        <field key="order" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="true" />
         <field key="referred_on" formatter="datetime" dbtype="int" precision="20" phptype="int" null="false" default="0" />
     </object>
 </model>

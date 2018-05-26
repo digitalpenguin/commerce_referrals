@@ -5,7 +5,7 @@ use modmore\Commerce\Admin\Widgets\GridWidget;
 use modmore\Commerce\Admin\Util\Action;
 
 class ReferrerGrid extends GridWidget {
-    public $key = 'referrers';
+    public $key = 'referrers-grid';
     public $defaultSort = 'name';
 
     public function getItems(array $options = array())
@@ -104,18 +104,17 @@ class ReferrerGrid extends GridWidget {
     {
         $item['actions'] = [];
 
-        //if (in_array($this->order->getState(), [\comOrder::STATE_CART, \comOrder::STATE_PROCESSING], true)) {
-            $editUrl = $this->adapter->makeAdminUrl('referrers/update', ['id' => $item['id']]);
-            $item['actions'][] = (new Action())
-                ->setUrl($editUrl)
-                ->setTitle($this->adapter->lexicon('commerce_referrals.referrer.edit'))
-                ->setIcon('icon-edit');
-            $deleteUrl = $this->adapter->makeAdminUrl('referrers/delete', ['id' => $item['id'], 'order' => $item['order']]);
-            $item['actions'][] = (new Action())
-                ->setUrl($deleteUrl)
-                ->setTitle($this->adapter->lexicon('commerce_referrals.referrer.delete'))
-                ->setIcon('icon-trash');
-        //}
+        $editUrl = $this->adapter->makeAdminUrl('referrers/update', ['id' => $item['id']]);
+        $item['actions'][] = (new Action())
+            ->setUrl($editUrl)
+            ->setTitle($this->adapter->lexicon('commerce_referrals.referrer.edit'))
+            ->setIcon('icon-edit');
+        $deleteUrl = $this->adapter->makeAdminUrl('referrers/delete', ['id' => $item['id']]);
+        $item['actions'][] = (new Action())
+            ->setUrl($deleteUrl)
+            ->setTitle($this->adapter->lexicon('commerce_referrals.referrer.delete'))
+            ->setIcon('icon-trash');
+
 
 
         return $item;

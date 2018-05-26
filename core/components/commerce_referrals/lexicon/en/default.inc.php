@@ -25,3 +25,13 @@ $_lang['commerce_referrals.country'] = 'Country';
 $_lang['commerce_referrals.comment'] = 'Comments';
 
 $_lang['commerce_referrals.validation.already_exists'] = 'Already exists! Please enter a unique value.';
+
+$_lang['commerce_referrals.referral.referrer'] = 'Referred By';
+$_lang['commerce_referrals.referral.referred_name'] = 'Referred To';
+$_lang['commerce_referrals.referral.edit'] = 'Edit Referral';
+$_lang['commerce_referrals.referral.delete'] = 'Delete Referral';
+$_lang['commerce_referrals.referral.sku'] = 'SKU';
+$_lang['commerce_referrals.referral.when'] = 'When';
+$_lang['commerce_referrals.referral.order'] = 'Order';
+$_lang['commerce_referrals.referral.amount'] = 'Amount';
+$_lang['commerce_referrals.referral.view_order_details'] = 'View order details';

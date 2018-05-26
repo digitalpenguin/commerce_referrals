@@ -107,8 +107,11 @@ $modulePath = $componentPath . '/core/components/commerce_referrals/src/Modules/
 // Instruct Commerce to load modules from our directory, providing the base namespace and module path twice
 $commerce->loadModulesFromDirectory($modulePath, 'DigitalPenguin\\Referrals\\Modules\\', $modulePath);
 
+
+$modx->addPackage('commerce_referrals', $componentPath.'/core/components/commerce_referrals/model/');
 $manager= $modx->getManager();
-$modx->addPackage('commerce_referrals', $componentPath . '/core/components/commerce_referrals/model/');
+$generator = $manager->getGenerator();
+$generator->parseSchema($componentPath . '/core/components/commerce_referrals/model/schema/commerce_referrals.mysql.schema.xml', $componentPath.'/core/components/commerce_referrals/model/');
 $manager->createObjectContainer('CommerceReferralsReferrer');
 $manager->createObjectContainer('CommerceReferralsReferral');
 
