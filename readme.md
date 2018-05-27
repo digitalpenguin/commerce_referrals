@@ -1,6 +1,12 @@
 Commerce_Referrals
 ===
 
+This Extra requires Commerce by Modmore.
+
+
+[![commerce_referrals Referrals Grid](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrals.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrals.png)
+
+
 This small module adds an extra page to the Commerce dashboard with a grid to keep partner company information.
 Each partner is assigned a referral token which they can then use on the end of a product URL to send customers to your shop.
 
@@ -15,7 +21,16 @@ that token. If so, the token is added to the order.
 The manager user can then see if this is a referral order. A referral section is added to the order detail page in Commerce.
 The partner company information is displayed so they can take whatever action they've agreed to.
 
-[![commerce_referrals Referrals Grid](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrals.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrals.png)
+*Install*
+
+- Install the package and then activate the module in the configuration tab of the Commerce dashboard.
+
+*Usage*
+
+- In the Commerce dashboard, click on the Referrals tab and then select **Referrers** in the subnav.
+- Add details of a partner company that will refer customers to your products.
+- One of the details will be a 'token'. The referrer then adds this token on the end of the URL and their referral will then be recorded. 
+
 
 [![commerce_referrals Referrers Grid](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrers.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrers.png)
  

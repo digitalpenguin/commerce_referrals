@@ -17,12 +17,20 @@ if ($object->xpdo) {
                 include $basePath . 'vendor/autoload.php';
                 $modulePath = $basePath . 'src/Modules/';
                 // Instruct Commerce to load modules from our directory, providing the base namespace and module path twice
-                $commerce->loadModulesFromDirectory($modulePath, 'ThirdParty\\Referrals\\Modules\\', $modulePath);
+                $commerce->loadModulesFromDirectory($modulePath, 'DigitalPenguin\\Referrals\\Modules\\', $modulePath);
                 $modx->log(modX::LOG_LEVEL_INFO, 'Synchronised modules.');
             }
             else {
                 $modx->log(modX::LOG_LEVEL_ERROR, 'Could not load Commerce service to load module');
             }
+
+
+            // Build the db tables
+            $modelPath = $modx->getOption('core_path').'components/commerce_referrals/model/';
+            $modx->addPackage('commerce_referrals', $modelPath);
+            $manager = $modx->getManager();
+            $manager->createObjectContainer('CommerceReferralsReferral');
+            $manager->createObjectContainer('CommerceReferralsReferrer');
 
         break;
     }
