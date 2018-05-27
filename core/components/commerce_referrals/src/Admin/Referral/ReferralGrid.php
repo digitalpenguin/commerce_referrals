@@ -5,7 +5,7 @@ use modmore\Commerce\Admin\Widgets\GridWidget;
 
 class ReferralGrid extends GridWidget {
     public $key = 'referrals-grid';
-    public $defaultSort = 'id';
+    public $defaultSort = 'referred_on';
     public $defaultSortDir = 'DESC';
 
     public function getItems(array $options = array())
@@ -15,7 +15,7 @@ class ReferralGrid extends GridWidget {
         $c = $this->adapter->newQuery('CommerceReferralsReferral');
         $count = $this->adapter->getCount('CommerceReferralsReferral', $c);
         $this->setTotalCount($count);
-
+        $c->sortby($this->defaultSort,$this->defaultSortDir);
         $c->limit($options['limit'], $options['start']);
         $collection = $this->adapter->getCollection('CommerceReferralsReferral', $c);
 
@@ -85,7 +85,7 @@ class ReferralGrid extends GridWidget {
                 'id'    =>  $orderId
             ]);
             $order = $order->toArray();
-            $this->adapter->log(1,print_r($order,true));
+            //$this->adapter->log(1,print_r($order,true));
             $item['amount'] = $order['total_formatted'];
             $item['order'] = '<a href="?namespace=commerce&a=index&ca=order&order='.$item['order'].'">'.$this->adapter->lexicon('commerce_referrals.referral.view_order_details').'</a>';
 
