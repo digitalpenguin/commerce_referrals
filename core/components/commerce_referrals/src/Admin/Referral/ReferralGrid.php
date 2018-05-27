@@ -60,6 +60,11 @@ class ReferralGrid extends GridWidget {
                 'sortable' => true,
             ],
             [
+                'name' => 'customer',
+                'title' => $this->adapter->lexicon('commerce_referrals.referral.customer'),
+                'sortable' => true,
+            ],
+            [
                 'name' => 'amount',
                 'title' => $this->adapter->lexicon('commerce_referrals.referral.amount'),
                 'sortable' => true,
@@ -108,11 +113,20 @@ class ReferralGrid extends GridWidget {
                 'id'    =>  $orderId
             ]);
             $order = $order->toArray();
-            //$this->adapter->log(1,print_r($order,true));
             $item['amount'] = $order['total_formatted'];
             $item['order'] = '<a href="?namespace=commerce&a=index&ca=order&order='.$item['order'].'">'.$this->adapter->lexicon('commerce_referrals.referral.view_order_details').'</a>';
 
+            $c = $this->adapter->newQuery('comOrderAddress');
+            $c->leftJoin('comAddress','Address','Address.id=comOrderAddress.address');
+            $c->where([
+                'order' => $order['id']
+            ]);
+            $c->select('comOrderAddress.id,Address.fullname');
+            $address = $this->adapter->getObject('comOrderAddress',$c);
+            $item['customer'] = $address->get('fullname');
         }
+
+
 
         if($item['referred_on']) {
             $item['referred_on'] = date('H:i A - dS M Y', $item['referred_on']);
