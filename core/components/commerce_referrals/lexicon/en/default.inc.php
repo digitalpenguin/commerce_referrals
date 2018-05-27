@@ -35,3 +35,4 @@ $_lang['commerce_referrals.referral.when'] = 'When';
 $_lang['commerce_referrals.referral.order'] = 'Order';
 $_lang['commerce_referrals.referral.amount'] = 'Amount';
 $_lang['commerce_referrals.referral.view_order_details'] = 'View order details';
+$_lang['commerce_referrals.search_by_referrer'] = 'Search by referrer name';

@@ -3,7 +3,6 @@ namespace DigitalPenguin\Referrals\Admin\Referral;
 
 use modmore\Commerce\Admin\Page;
 use modmore\Commerce\Admin\Sections\SimpleSection;
-use modmore\Commerce\Admin\Widgets\HtmlWidget;
 
 class ReferralPage extends Page {
     public $key = 'referrals';

@@ -13,10 +13,24 @@ class ReferralGrid extends GridWidget {
         $items = [];
 
         $c = $this->adapter->newQuery('CommerceReferralsReferral');
+        $c->leftJoin('CommerceReferralsReferrer','Referrer','CommerceReferralsReferral.referrer_id=Referrer.id');
         $count = $this->adapter->getCount('CommerceReferralsReferral', $c);
         $this->setTotalCount($count);
         $c->sortby($this->defaultSort,$this->defaultSortDir);
         $c->limit($options['limit'], $options['start']);
+        $c->select('CommerceReferralsReferral.*');
+        $c->select($this->adapter->getSelectColumns('CommerceReferralsReferrer','Referrer',[
+            'name'
+        ]));
+
+        if ($options['search_by_referrer']) {
+            $c->where([
+                'Referrer.name:LIKE' => '%' . $options['search_by_referrer'] . '%'
+
+            ]);
+        }
+        //$c->prepare();
+        //$this->adapter->log(1,$c->toSQL());
         $collection = $this->adapter->getCollection('CommerceReferralsReferral', $c);
 
         foreach ($collection as $object) {
@@ -29,12 +43,12 @@ class ReferralGrid extends GridWidget {
     public function getColumns(array $options = array())
     {
         return [
-            [
+            /*[
                 'name' => 'id',
                 'title' => 'ID',
                 'primary' => true,
                 'sortable'=>true,
-            ],
+            ],*/
             [
                 'name' => 'referrer',
                 'title' => $this->adapter->lexicon('commerce_referrals.referral.referrer'),
@@ -55,13 +69,22 @@ class ReferralGrid extends GridWidget {
                 'title' => $this->adapter->lexicon('commerce_referrals.referral.order'),
                 'sortable' => true,
             ],
-
         ];
     }
 
     public function getTopToolbar(array $options = array())
     {
         $toolbar = [];
+
+        $toolbar[] = [
+            'name' => 'search_by_referrer',
+            'title' => $this->adapter->lexicon('commerce_referrals.search_by_referrer'),
+            'type' => 'textfield',
+            'value' => array_key_exists('search_by_referrer', $options) ? (int)$options['search_by_referrer'] : '',
+            'position' => 'top',
+            'width' => 'four wide',
+        ];
+
 
         $toolbar[] = [
             'name' => 'limit',
