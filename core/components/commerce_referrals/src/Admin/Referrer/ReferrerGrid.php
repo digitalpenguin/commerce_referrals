@@ -102,6 +102,21 @@ class ReferrerGrid extends GridWidget {
 
     public function prepareItem($item)
     {
+
+        // Get most recent referral
+        $c = $this->adapter->newQuery('CommerceReferralsReferral');
+        $c->where([
+            'referrer_id'   =>  $item['id']
+        ]);
+        $c->sortby('referred_on','DESC');
+        $referral = $this->adapter->getObject('CommerceReferralsReferral',$c);
+        if($referral) {
+            $item['latest'] = '<a href="?namespace=commerce&a=index&ca=order&order=' . $referral->get('order') . '">' . $this->adapter->lexicon('commerce_referrals.referral.view_order_details') . '</a>';
+        }
+
+        // Add number of successful orders for this referrer
+        $item['referrals'] = $this->adapter->getCount('CommerceReferralsReferral',['referrer_id'=>$item['id']]);
+
         $item['actions'] = [];
 
         $editUrl = $this->adapter->makeAdminUrl('referrers/update', ['id' => $item['id']]);
