@@ -15,5 +15,8 @@ that token. If so, the token is added to the order.
 The manager user can then see if this is a referral order. A referral section is added to the order detail page in Commerce.
 The partner company information is displayed so they can take whatever action they've agreed to.
 
+[![commerce_referrals Referrals Grid](https://github.com/digitalpenguin/commerce_referrals/blob/master/core/components/commerce_referrals/docs/img/commerce-referrals.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce-referrals.png)
+
+[![commerce_referrals Referrers Grid](https://github.com/digitalpenguin/commerce_referrals/blob/master/core/components/commerce_referrals/docs/img/commerce-referrers.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce-referrers.png)
  
 [![commerce_referrals Order](https://github.com/digitalpenguin/commerce_referrals/blob/master/core/components/commerce_referrals/docs/img/referrer-in-order.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/referrer-in-order.png)
