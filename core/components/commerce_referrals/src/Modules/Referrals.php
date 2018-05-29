@@ -33,6 +33,7 @@ class Referrals extends BaseModule {
         return $this->adapter->lexicon('commerce_referrals.description');
     }
 
+
     public function initialize(EventDispatcher $dispatcher)
     {
         // Load our lexicon
@@ -54,17 +55,15 @@ class Referrals extends BaseModule {
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_PAGE_BEFORE_GENERATE,[$this, 'addSectionToOrderPage']);
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_ORDER_ACTIONS,[$this, 'getOrder']);
         $dispatcher->addListener(\Commerce::EVENT_STATE_CART_TO_PROCESSING,[$this, 'addReferrerTokenToOrder']);
-
     }
-
 
     /**
      * Takes the 'ref' value from the user's session and
      * adds it to the order properties.
      * @param Item $event
      */
-    public function addReferrerTokenToOrder(OrderState $event) {
-        //$this->adapter->log(1,'Session ref: '.$_SESSION['ref']);
+    public function addReferrerTokenToOrder(OrderState $event)
+    {
         $order = $event->getOrder();
         if($order){
             $orderArr = $order->toArray();
@@ -88,8 +87,12 @@ class Referrals extends BaseModule {
         }
     }
 
-
-    public function getOrder(OrderActions $event) {
+    /**
+     * Loads the order from the event.
+     * @param OrderActions $event
+     */
+    public function getOrder(OrderActions $event)
+    {
         $this->order = $event->getOrder();
     }
 
@@ -97,43 +100,32 @@ class Referrals extends BaseModule {
      * Adds the referrer section to the order page. This allows the user to see which partner
      * referred the customer that made the purchase.
      * @param PageEvent $event
-     *
-     * Section keys are:
-     * - order_header
-     * - referrer_section
-     * - items_section
-     * - customer_section
-     * - shipments_section
-     * - transactions_section
      */
-    public function addSectionToOrderPage(PageEvent $event) {
+    public function addSectionToOrderPage(PageEvent $event)
+    {
         $page = $event->getPage();
         $meta = $page->getMeta();
         if($meta['key'] === 'order') {
-            $orderArray = $this->order->toArray();
-            $this->adapter->log(1,print_r($orderArray,true));
-
-            if($orderArray['properties']['referrer']['token']) {
-                //$this->adapter->log(1,print_r($orderArray,true));
+            $refArray = $this->order->getProperty('referrer');
+            if($refArray['token']) {
                 $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
-                    'token' =>  $orderArray['properties']['referrer']['token']
+                    'token' =>  $refArray['token']
                 ]);
                 if($referrer) {
                     $page->addSection((new ReferralSection($this->commerce, [
                         'order' => $this->order,
-                        'priority' => 1,
+                        'priority' => 6,
                         'referrer' => $referrer->toArray()
                     ]))->setUp());
-                    $page->findSection('items_section')->priority = 2;
-                    $page->findSection('customer_section')->priority = 3;
-                    $page->findSection('shipments_section')->priority = 4;
-                    $page->findSection('transactions_section')->priority = 5;
                 }
             }
-
         }
     }
 
+    /**
+     * Loads required pages into the generator.
+     * @param GeneratorEvent $event
+     */
     public function loadPages(GeneratorEvent $event)
     {
         $generator = $event->getGenerator();
@@ -142,14 +134,15 @@ class Referrals extends BaseModule {
         $generator->addPage('referrers/create', '\DigitalPenguin\Referrals\Admin\Referrer\Create');
         $generator->addPage('referrers/update', '\DigitalPenguin\Referrals\Admin\Referrer\Update');
         $generator->addPage('referrers/delete', '\DigitalPenguin\Referrals\Admin\Referrer\Delete');
-
-
     }
 
+    /**
+     * Loads Referral tab into main nav as well as sub-nav tabs.
+     * @param TopNavMenuEvent $event
+     */
     public function loadMenuItem(TopNavMenuEvent $event)
     {
         $items = $event->getItems();
-
         $items = $this->insertInArray($items, ['referrals' => [
             'name' => 'Referrals',
             'key' => 'referrals',
@@ -168,14 +161,21 @@ class Referrals extends BaseModule {
                     'link' => $this->adapter->makeAdminUrl('referrals/referrers'),
                     'icon' => 'icon icon-user',
                 ],
-
             ],
-        ]], 5);
-
+        ]], $this->adapter->getOption('commerce_referrals.tab_position',null,3));
         $event->setItems($items);
     }
 
-    private function insertInArray($array,$values,$offset) {
+    /**
+     * Helper function for adding an item into the specified position in a given array.
+     * Primarily used for adding a tab into the main nav.
+     * @param $array
+     * @param $values
+     * @param $offset
+     * @return array
+     */
+    private function insertInArray($array,$values,$offset)
+    {
         return array_slice($array, 0, $offset, true) + $values + array_slice($array, $offset, NULL, true);
     }
 
