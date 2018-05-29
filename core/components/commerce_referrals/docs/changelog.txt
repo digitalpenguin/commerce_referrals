@@ -1,4 +1,12 @@
-++ Referrals for Commerce 1.0.0-pl
-++ Released on
+++ Commerce_Referrals 1.0.1-pl
+++ Released on 29-05-2018
+++++++++++++++++++++++++++
+- Made some positioning changes on the order page to take advantage of a new feature in Commerce 0.11.0-pl
+- Added a tab_position system setting which takes a number and will insert the referral tab in that position.
+- Changed to using Commerce style getters and setters in some places to ensure future compatibility.
+- Some code cleanup
+
+++ Commerce_Referrals 1.0.0-pl
+++ Released on 27-05-2018
 ++++++++++++++++++++++++++
 - First release

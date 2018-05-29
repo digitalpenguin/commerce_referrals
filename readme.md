@@ -31,6 +31,9 @@ The partner company information is displayed so they can take whatever action th
 - Add details of a partner company that will refer customers to your products.
 - One of the details will be a 'token'. The referrer then adds this token on the end of the URL and their referral will then be recorded. 
 
+*System Setting*
+
+- *commerce_referrals.tab_position* - allows you to set the position in the Commerce nav menu that the referrals tab is added. Value should be an integer. 
 
 [![commerce_referrals Referrers Grid](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrers.png "Click to zoom in!")](https://raw.githubusercontent.com/digitalpenguin/commerce_referrals/master/core/components/commerce_referrals/docs/img/commerce_referrers.png)
  
