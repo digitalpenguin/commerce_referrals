@@ -23,14 +23,13 @@ class ReferralGrid extends GridWidget {
             'name'
         ]));
 
-        if ($options['search_by_referrer']) {
-            $c->where([
-                'Referrer.name:LIKE' => '%' . $options['search_by_referrer'] . '%'
-
-            ]);
+        if(array_key_exists('search_by_referrer', $options)) {
+            if ($options['search_by_referrer']) {
+                $c->where([
+                    'Referrer.name:LIKE' => '%' . $options['search_by_referrer'] . '%'
+                ]);
+            }
         }
-        //$c->prepare();
-        //$this->adapter->log(1,$c->toSQL());
         $collection = $this->adapter->getCollection('CommerceReferralsReferral', $c);
 
         foreach ($collection as $object) {
