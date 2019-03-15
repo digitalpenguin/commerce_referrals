@@ -72,6 +72,7 @@ class ReferralGrid extends GridWidget {
                 'name' => 'order',
                 'title' => $this->adapter->lexicon('commerce_referrals.referral.order'),
                 'sortable' => true,
+                'raw' => true,
             ],
         ];
     }
