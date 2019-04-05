@@ -112,18 +112,20 @@ class ReferralGrid extends GridWidget {
             $order = $this->adapter->getObject('comOrder',[
                 'id'    =>  $orderId
             ]);
-            $order = $order->toArray();
-            $item['amount'] = $order['total_formatted'];
-            $item['order'] = '<a href="?namespace=commerce&a=index&ca=order&order='.$item['order'].'">'.$this->adapter->lexicon('commerce_referrals.referral.view_order_details').'</a>';
+            if($order) {
+                $order = $order->toArray();
+                $item['amount'] = $order['total_formatted'];
+                $item['order'] = '<a href="?namespace=commerce&a=index&ca=order&order=' . $item['order'] . '">' . $this->adapter->lexicon('commerce_referrals.referral.view_order_details') . '</a>';
 
-            $c = $this->adapter->newQuery('comOrderAddress');
-            $c->leftJoin('comAddress','Address','Address.id=comOrderAddress.address');
-            $c->where([
-                'order' => $order['id']
-            ]);
-            $c->select('comOrderAddress.id,Address.fullname');
-            $address = $this->adapter->getObject('comOrderAddress',$c);
-            $item['customer'] = $address->get('fullname');
+                $c = $this->adapter->newQuery('comOrderAddress');
+                $c->leftJoin('comAddress', 'Address', 'Address.id=comOrderAddress.address');
+                $c->where([
+                    'order' => $order['id']
+                ]);
+                $c->select('comOrderAddress.id,Address.fullname');
+                $address = $this->adapter->getObject('comOrderAddress', $c);
+                $item['customer'] = $address->get('fullname');
+            }
         }
 
 
