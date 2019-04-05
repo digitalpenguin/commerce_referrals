@@ -1,3 +1,10 @@
+++ Commerce_Referrals 1.0.2-pl
+++ Released on 05-04-2019
+++++++++++++++++++++++++++
+- Fixed compatibility issues with Commerce 1.0
+- Added check to make sure an order exists before altering it.
+- Added the new 'raw' column property to make sure links are formed correctly. (Thanks to MarkH)
+
 ++ Commerce_Referrals 1.0.1-pl
 ++ Released on 29-05-2018
 ++++++++++++++++++++++++++

@@ -23,7 +23,7 @@ if (!defined('MOREPROVIDER_BUILD')) {
     /* define version */
     define('PKG_NAME', 'Commerce_Referrals');
     define('PKG_NAMESPACE', 'commerce_referrals');
-    define('PKG_VERSION', '1.0.1');
+    define('PKG_VERSION', '1.0.2');
     define('PKG_RELEASE', 'pl');
 
     /* load modx */
