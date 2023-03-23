@@ -6,7 +6,7 @@ use modmore\Commerce\Events\Admin\OrderActions;
 use modmore\Commerce\Events\Admin\TopNavMenu as TopNavMenuEvent;
 use modmore\Commerce\Events\OrderState;
 use modmore\Commerce\Modules\BaseModule;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use modmore\Commerce\Dispatcher\EventDispatcher;
 use modmore\Commerce\Events\Admin\PageEvent;
 use modmore\Commerce\Events\Cart\Item;
 use DigitalPenguin\Referrals\Admin\Order\ReferralSection;
@@ -69,7 +69,7 @@ class Referrals extends BaseModule {
             $orderArr = $order->toArray();
             if($_SESSION['ref']) {
                 $referrerToken['token'] = $_SESSION['ref'];
-                $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
+                $referrer = $this->adapter->getObject(\CommerceReferralsReferrer::class,[
                     'token' =>  $referrerToken['token']
                 ]);
 
@@ -77,10 +77,10 @@ class Referrals extends BaseModule {
                     $order->setProperty('referrer',$referrerToken);
                     $order->save();
                     // Create referral record
-                    $referral = $this->adapter->newObject('CommerceReferralsReferral');
-                    $referral->set('referrer_id',$referrer->get('id'));
-                    $referral->set('referred_on',time());
-                    $referral->set('order',$orderArr['id']);
+                    $referral = $this->adapter->newObject(\CommerceReferralsReferral::class);
+                    $referral->set('referrer_id', $referrer->get('id'));
+                    $referral->set('referred_on', time());
+                    $referral->set('order', $orderArr['id']);
                     $referral->save();
                 }
             }
@@ -105,13 +105,13 @@ class Referrals extends BaseModule {
     {
         $page = $event->getPage();
         $meta = $page->getMeta();
-        if($meta['key'] === 'order') {
+        if ($meta['key'] === 'order') {
             $refArray = $this->order->getProperty('referrer');
-            if($refArray['token']) {
-                $referrer = $this->adapter->getObject('CommerceReferralsReferrer',[
+            if ($refArray['token']) {
+                $referrer = $this->adapter->getObject(\CommerceReferralsReferrer::class, [
                     'token' =>  $refArray['token']
                 ]);
-                if($referrer) {
+                if ($referrer) {
                     $page->addSection((new ReferralSection($this->commerce, [
                         'order' => $this->order,
                         'priority' => 6,
@@ -162,7 +162,7 @@ class Referrals extends BaseModule {
                     'icon' => 'icon icon-user',
                 ],
             ],
-        ]], $this->adapter->getOption('commerce_referrals.tab_position',null,3));
+        ]], $this->adapter->getOption('commerce_referrals.tab_position', null, 3));
         $event->setItems($items);
     }
 
@@ -174,7 +174,7 @@ class Referrals extends BaseModule {
      * @param $offset
      * @return array
      */
-    private function insertInArray($array,$values,$offset)
+    private function insertInArray($array, $values, $offset)
     {
         return array_slice($array, 0, $offset, true) + $values + array_slice($array, $offset, NULL, true);
     }

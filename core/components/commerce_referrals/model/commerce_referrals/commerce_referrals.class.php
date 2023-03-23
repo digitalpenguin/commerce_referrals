@@ -8,12 +8,14 @@ class Commerce_Referrals
 {
     public $modx = null;
     public $commerce = null;
-    public $namespace = 'commerce_referrals';
-    public $cache = null;
-    public $options = array();
+    public string $namespace = 'commerce_referrals';
+    public array $options = [];
 
-
-    public function __construct(modX &$modx, array $options = array())
+    /**
+     * @param modX $modx
+     * @param array $options
+     */
+    public function __construct(modX &$modx, array $options = [])
     {
         $this->modx =& $modx;
         $this->namespace = $this->getOption('namespace', $options, 'commerce_referrals');
@@ -23,7 +25,7 @@ class Commerce_Referrals
         $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/commerce_referrals/');
 
         /* loads some default paths for easier management */
-        $this->options = array_merge(array(
+        $this->options = array_merge([
             'namespace' => $this->namespace,
             'corePath' => $corePath,
             'modelPath' => $corePath . 'model/',
@@ -35,7 +37,7 @@ class Commerce_Referrals
             'jsUrl' => $assetsUrl . 'js/',
             'cssUrl' => $assetsUrl . 'css/',
             'connectorUrl' => $assetsUrl . 'connector.php'
-        ), $options);
+        ], $options);
 
         $this->commerce = $this->modx->getService('commerce', 'Commerce', MODX_CORE_PATH . 'components/commerce/model/commerce/');
         if (!($this->commerce instanceof Commerce)) $this->modx->log(1, 'Couldn\'t load commerce');
@@ -54,15 +56,17 @@ class Commerce_Referrals
      * namespaced system setting; by default this value is null.
      * @return mixed The option value or the default value specified.
      */
-    public function getOption($key, $options = array(), $default = null)
+    public function getOption(string $key, array $options = [], $default = null)
     {
         $option = $default;
-        if (!empty($key) && is_string($key)) {
+        if (!empty($key)) {
             if ($options != null && array_key_exists($key, $options)) {
                 $option = $options[$key];
-            } elseif (array_key_exists($key, $this->options)) {
+            }
+            elseif (array_key_exists($key, $this->options)) {
                 $option = $this->options[$key];
-            } elseif (array_key_exists("{$this->namespace}.{$key}", $this->modx->config)) {
+            }
+            elseif (array_key_exists("{$this->namespace}.{$key}", $this->modx->config)) {
                 $option = $this->modx->getOption("{$this->namespace}.{$key}");
             }
         }

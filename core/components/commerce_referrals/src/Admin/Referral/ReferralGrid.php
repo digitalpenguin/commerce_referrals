@@ -8,20 +8,25 @@ class ReferralGrid extends GridWidget {
     public $defaultSort = 'referred_on';
     public $defaultSortDir = 'DESC';
 
-    public function getItems(array $options = array())
+    public function getItems(array $options = [])
     {
         $items = [];
 
-        $c = $this->adapter->newQuery('CommerceReferralsReferral');
-        $c->leftJoin('CommerceReferralsReferrer','Referrer','CommerceReferralsReferral.referrer_id=Referrer.id');
-        $count = $this->adapter->getCount('CommerceReferralsReferral', $c);
+        $c = $this->adapter->newQuery(\CommerceReferralsReferral::class);
+        $c->leftJoin('CommerceReferralsReferrer','Referrer',[
+            'CommerceReferralsReferral.referrer_id = Referrer.id'
+        ]);
+        $count = $this->adapter->getCount(\CommerceReferralsReferral::class, $c);
         $this->setTotalCount($count);
         $c->sortby($this->defaultSort,$this->defaultSortDir);
         $c->limit($options['limit'], $options['start']);
         $c->select('CommerceReferralsReferral.*');
-        $c->select($this->adapter->getSelectColumns('CommerceReferralsReferrer','Referrer',[
-            'name'
-        ]));
+        $c->select($this->adapter->getSelectColumns(
+            \CommerceReferralsReferrer::class,
+            'Referrer',
+            '',
+            ['name']
+        ));
 
         if(array_key_exists('search_by_referrer', $options)) {
             if ($options['search_by_referrer']) {
@@ -30,7 +35,7 @@ class ReferralGrid extends GridWidget {
                 ]);
             }
         }
-        $collection = $this->adapter->getCollection('CommerceReferralsReferral', $c);
+        $collection = $this->adapter->getCollection(\CommerceReferralsReferral::class, $c);
 
         foreach ($collection as $object) {
             $items[] = $this->prepareItem($object->toArray());
@@ -39,7 +44,7 @@ class ReferralGrid extends GridWidget {
         return $items;
     }
 
-    public function getColumns(array $options = array())
+    public function getColumns(array $options = [])
     {
         return [
             /*[
