@@ -1,6 +1,7 @@
 <?php
 namespace DigitalPenguin\Referrals\Modules;
 
+use DigitalPenguin\Referrals\Order\Field\ReferrerField;
 use modmore\Commerce\Events\Admin\GeneratorEvent;
 use modmore\Commerce\Events\Admin\OrderActions;
 use modmore\Commerce\Events\Admin\TopNavMenu as TopNavMenuEvent;
@@ -8,7 +9,6 @@ use modmore\Commerce\Events\OrderState;
 use modmore\Commerce\Modules\BaseModule;
 use modmore\Commerce\Dispatcher\EventDispatcher;
 use modmore\Commerce\Events\Admin\PageEvent;
-use modmore\Commerce\Events\Cart\Item;
 use DigitalPenguin\Referrals\Admin\Order\ReferralSection;
 
 require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
@@ -25,7 +25,7 @@ class Referrals extends BaseModule {
 
     public function getAuthor()
     {
-        return 'Murray Wood - Digital Penguin';
+        return 'Murray Wood';
     }
 
     public function getDescription()
@@ -45,10 +45,8 @@ class Referrals extends BaseModule {
         $this->adapter->loadPackage('commerce_referrals', $path);
 
         // Add template path to twig
-//        /** @var ChainLoader $loader */
-//        $root = dirname(dirname(__DIR__));
-//        $loader = $this->commerce->twig->getLoader();
-//        $loader->addLoader(new FilesystemLoader($root . '/templates/'));
+        $root = dirname(__DIR__, 2);
+        $this->commerce->view()->addTemplatesPath($root . '/templates/');
 
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_INIT_GENERATOR, [$this, 'loadPages']);
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_GET_MENU, [$this, 'loadMenuItem']);
@@ -60,7 +58,7 @@ class Referrals extends BaseModule {
     /**
      * Takes the 'ref' value from the user's session and
      * adds it to the order properties.
-     * @param Item $event
+     * @param OrderState $event
      */
     public function addReferrerTokenToOrder(OrderState $event)
     {
@@ -74,14 +72,15 @@ class Referrals extends BaseModule {
                 ]);
 
                 if ($referrer) {
-                    $order->setProperty('referrer', $token);
-                    $order->save();
                     // Create referral record
                     $referral = $this->adapter->newObject(\CommerceReferralsReferral::class);
                     $referral->set('referrer_id', $referrer->get('id'));
                     $referral->set('referred_on', time());
                     $referral->set('order', $orderArr['id']);
                     $referral->save();
+
+                    $field = new ReferrerField($this->commerce, 'referred_by', json_encode($referrer->toArray()));
+                    $order->setOrderField($field);
                 }
             }
         }
@@ -99,6 +98,7 @@ class Referrals extends BaseModule {
     /**
      * Adds the referrer section to the order page. This allows the user to see which partner
      * referred the customer that made the purchase.
+     * @deprecated This still exists for backwards compatibility
      * @param PageEvent $event
      */
     public function addSectionToOrderPage(PageEvent $event)
@@ -106,16 +106,16 @@ class Referrals extends BaseModule {
         $page = $event->getPage();
         $meta = $page->getMeta();
         if ($meta['key'] === 'order') {
-            $refArray = $this->order->getProperty('referrer');
-            if ($refArray['token']) {
+            $token = $this->order->getProperty('referrer');
+            if (!empty($token)) {
                 $referrer = $this->adapter->getObject(\CommerceReferralsReferrer::class, [
-                    'token' =>  $refArray['token']
+                    'token' => $token,
                 ]);
                 if ($referrer) {
                     $page->addSection((new ReferralSection($this->commerce, [
                         'order' => $this->order,
                         'priority' => 6,
-                        'referrer' => $referrer->toArray()
+                        'referrer' => $referrer->toArray(),
                     ]))->setUp());
                 }
             }

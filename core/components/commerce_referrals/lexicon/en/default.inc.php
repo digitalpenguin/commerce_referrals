@@ -1,5 +1,7 @@
 <?php
 
+$_lang['commerce.referred_by'] = 'Referred by';
+
 $_lang['commerce_referrals'] = 'Referrals';
 $_lang['commerce_referrals.description'] = 'Manage your referrer information here.';
 $_lang['commerce_referrals.referrers'] = 'Referrers';
