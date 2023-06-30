@@ -89,6 +89,23 @@ foreach ($settings as $key => $opts) {
     }
 }
 
+if (!createObject('modPlugin', [
+    'name' => 'Commerce_Referrals',
+    'static' => true,
+    'static_file' => $componentPath . '/core/components/commerce_referrals/elements/plugins/getreferenceparam.plugin.php',
+], 'name', true)) {
+    echo "Error creating Commerce_Referrals Plugin.\n";
+}
+$plugin = $modx->getObject('modPlugin', ['name' => 'Commerce_Referrals']);
+if ($plugin) {
+    if (!createObject('modPluginEvent', [
+        'pluginid' => $plugin->get('id'),
+        'event' => 'OnLoadWebDocument',
+        'priority' => 0,
+    ], ['pluginid','event'], false)) {
+        echo "Error creating modPluginEvent.\n";
+    }
+}
 
 $path = $modx->getOption('commerce.core_path', null, MODX_CORE_PATH . 'components/commerce/') . 'model/commerce/';
 $params = ['mode' => $modx->getOption('commerce.mode')];
@@ -97,6 +114,7 @@ $commerce = $modx->getService('commerce', 'Commerce', $path, $params);
 if (!($commerce instanceof Commerce)) {
     die("Couldn't load Commerce class");
 }
+
 
 // Make sure our module can be loaded. In this case we're using a composer-provided PSR4 autoloader.
 include $componentPath . '/core/components/commerce_referrals/vendor/autoload.php';
@@ -108,12 +126,10 @@ $modulePath = $componentPath . '/core/components/commerce_referrals/src/Modules/
 $commerce->loadModulesFromDirectory($modulePath, 'DigitalPenguin\\Referrals\\Modules\\', $modulePath);
 
 
-$modx->addPackage('commerce_referrals', $componentPath.'/core/components/commerce_referrals/model/');
+//$modx->addPackage('commerce_referrals', $componentPath.'/core/components/commerce_referrals/model/');
 $manager= $modx->getManager();
-$generator = $manager->getGenerator();
-$generator->parseSchema($componentPath . '/core/components/commerce_referrals/model/schema/commerce_referrals.mysql.schema.xml', $componentPath.'/core/components/commerce_referrals/model/');
-$manager->createObjectContainer('CommerceReferralsReferrer');
-$manager->createObjectContainer('CommerceReferralsReferral');
+$manager->createObjectContainer(\CommerceReferralsReferrer::class);
+$manager->createObjectContainer(\CommerceReferralsReferral::class);
 
 // Clear the cache
 $modx->cacheManager->refresh();

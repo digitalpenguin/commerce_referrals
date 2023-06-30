@@ -65,16 +65,16 @@ class Referrals extends BaseModule {
     public function addReferrerTokenToOrder(OrderState $event)
     {
         $order = $event->getOrder();
-        if($order){
+        if ($order) {
             $orderArr = $order->toArray();
-            if($_SESSION['ref']) {
-                $referrerToken['token'] = $_SESSION['ref'];
+            if (!empty($_SESSION['commerce_referrals_reference'])) {
+                $token = $_SESSION['commerce_referrals_reference'];
                 $referrer = $this->adapter->getObject(\CommerceReferralsReferrer::class,[
-                    'token' =>  $referrerToken['token']
+                    'token' =>  $token,
                 ]);
 
-                if($referrer) {
-                    $order->setProperty('referrer',$referrerToken);
+                if ($referrer) {
+                    $order->setProperty('referrer', $token);
                     $order->save();
                     // Create referral record
                     $referral = $this->adapter->newObject(\CommerceReferralsReferral::class);

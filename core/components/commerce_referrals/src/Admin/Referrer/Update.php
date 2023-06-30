@@ -12,7 +12,6 @@ class Update extends Page {
     public function setUp()
     {
         $objectId = (int)$this->getOption('id', 0);
-        $this->adapter->log(1,'id: '.$objectId);
         $exists = $this->adapter->getCount('CommerceReferralsReferrer', ['id' => $objectId]);
 
         if ($exists) {
