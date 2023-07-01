@@ -1,3 +1,13 @@
+Commerce_Referrals 1.1.0-pl
+---------------------------
+Released on 2023-07-01
+
+- MODX 3 and PHP 8 compatibility
+- Update to new Commerce dispatcher class
+- Improve grid queries
+- Fix bootstrapping
+- Switch to using inbuilt Commerce order fields with twig template rather than injecting an HTML section.
+
 ++ Commerce_Referrals 1.0.2-pl
 ++ Released on 05-04-2019
 ++++++++++++++++++++++++++
