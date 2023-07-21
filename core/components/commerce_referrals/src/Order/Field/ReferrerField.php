@@ -30,4 +30,9 @@ class ReferrerField extends AbstractField
             return $e->getMessage();
         }
     }
+
+    public function renderForCustomer()
+    {
+        return $this->renderForAdmin();
+    }
 }
